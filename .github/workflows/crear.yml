@@ -10,35 +10,34 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.24'
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
 
-    - name: Verificar versión
-      run: go version
+      - name: Verificar versión
+        run: go version
 
-    - name: Compilar aplicación
-      run: go build -o app .
+      - name: Compilar aplicación
+        run: go build -o app .
 
-    - name: Ejecutar aplicación
-      run: ./app
+      - name: Ejecutar aplicación
+        run: ./app
 
-    - name: Simulación del deploy
-      run: echo "Simulando despliegue de la aplicación"
+      - name: Simulación del deploy
+        run: echo "Simulando despliegue de la aplicación"
 
-    - name: Construir imagen Docker
-      run: docker build -t ghcr.io/yajanuha597/hello-go:1.0.0 .
+      - name: Construir imagen Docker
+        run: docker build -t ghcr.io/yajanuha597/hello-go:1.0.0 .
 
-    - name: Login en GitHub Container Registry
-      run: |
-        echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u yajanuha597 --password-stdin
+      - name: Login en GitHub Container Registry
+        run: |
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    - name: Publicar imagen
-      run: docker push ghcr.io/yajanuha597/hello-go:1.0.0
+      - name: Publicar imagen
+        run: docker push ghcr.io/yajanuha597/hello-go:1.0.0
